@@ -46,3 +46,24 @@ export class Title extends React.Component<{ children: Node }> {
     );
   }
 }
+
+export class Emoji extends React.Component<{ children: Node }> {
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {theme => (
+          <div
+            style={{
+              fontSize: "35px",
+              background: "white",
+              height: "40px",
+              width: "40px"
+            }}
+          >
+            {theme === "light" ? "⚡️" : "🕶"}
+          </div>
+        )}
+      </ThemeContext.Consumer>
+    );
+  }
+}
