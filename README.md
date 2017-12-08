@@ -23,8 +23,8 @@ const Context = createReactContext(defaultValue);
 
 ```js
 // @flow
-import React from 'react';
-import createReactContext from 'create-react-context';
+import React, { type Node } from 'react';
+import createReactContext, { type Context } from 'create-react-context';
 
 type Theme = 'light' | 'dark';
 // Pass a default theme to ensure type correctness

@@ -1,14 +1,12 @@
 {
   "name": "theme-example",
   "version": "1.0.0",
-  "description": "Example for create react context",
+  "description": "Example for create-react-context",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
