@@ -36,6 +36,10 @@ class ThemeToggler extends React.Component<
 }
 
 class Title extends React.Component<{ children: Node }> {
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     return (
       // The Consumer uses a render prop API. Avoids conflicts in the
@@ -63,7 +67,7 @@ test('with provider', () => {
     </ThemeToggler>
   );
 
-  expect(wrapper).toMatchSnapshot();
+  expect(wrapper).toMatchSnapshot('with provider - init');
   wrapper.find('button').simulate('click');
-  expect(wrapper).toMatchSnapshot();
+  expect(wrapper).toMatchSnapshot('with provider - after click');
 });

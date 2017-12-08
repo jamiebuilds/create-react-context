@@ -11,13 +11,39 @@ export type ConsumerProps<T> = {
   children: (value: T) => Node
 };
 
+export type ConsumerState<T> = {
+  value: T
+};
+
 export type Provider<T> = Component<ProviderProps<T>>;
-export type Consumer<T> = Component<ConsumerProps<T>>;
+export type Consumer<T> = Component<ConsumerProps<T>, ConsumerState<T>>;
 
 export type Context<T> = {
   Provider: Class<Provider<T>>,
   Consumer: Class<Consumer<T>>
 };
+
+function createEventEmitter(value) {
+  let handlers = [];
+  return {
+    on(handler) {
+      handlers.push(handler);
+    },
+
+    off(handler) {
+      handlers = handlers.filter(h => h === handler);
+    },
+
+    get() {
+      return value;
+    },
+
+    set(newValue) {
+      value = newValue;
+      handlers.forEach(handler => handler(value));
+    }
+  };
+}
 
 let uniqueId = 0;
 
@@ -25,14 +51,22 @@ function createReactContext<T>(defaultValue: T): Context<T> {
   const contextProp = '__create-react-context-' + uniqueId++ + '__';
 
   class Provider extends Component<ProviderProps<T>> {
+    emitter = createEventEmitter(this.props.value);
+
     static childContextTypes = {
-      [contextProp]: PropTypes.any.isRequired
+      [contextProp]: PropTypes.object.isRequired
     };
 
     getChildContext() {
       return {
-        [contextProp]: this.props.value
+        [contextProp]: this.emitter
       };
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (this.props.value !== nextProps.value) {
+        this.emitter.set(nextProps.value);
+      }
     }
 
     render() {
@@ -40,21 +74,43 @@ function createReactContext<T>(defaultValue: T): Context<T> {
     }
   }
 
-  class Consumer extends Component<ConsumerProps<T>> {
+  class Consumer extends Component<ConsumerProps<T>, ConsumerState<T>> {
     static contextTypes = {
-      [contextProp]: PropTypes.any
+      [contextProp]: PropTypes.object
+    };
+
+    state: ConsumerState<T> = {
+      value: this.getValue()
+    };
+
+    componentDidMount() {
+      if (this.context[contextProp]) {
+        this.context[contextProp].on(this.onUpdate);
+      }
+    }
+
+    componentWillUnmount() {
+      if (this.context[contextProp]) {
+        this.context[contextProp].off(this.onUpdate);
+      }
+    }
+
+    getValue(): T {
+      if (this.context[contextProp]) {
+        return this.context[contextProp].get();
+      } else {
+        return defaultValue;
+      }
+    }
+
+    onUpdate = () => {
+      this.setState({
+        value: this.getValue()
+      });
     };
 
     render() {
-      let value;
-
-      if (this.context.hasOwnProperty(contextProp)) {
-        value = this.context[contextProp];
-      } else {
-        value = defaultValue;
-      }
-
-      return this.props.children(value);
+      return this.props.children(this.state.value);
     }
   }
 
