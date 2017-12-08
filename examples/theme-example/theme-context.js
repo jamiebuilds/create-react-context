@@ -1,16 +1,16 @@
 // @flow
-import React from "react";
-import createReactContext from "../../src";
+import React from 'react';
+import createReactContext from '../../src';
 
-type Theme = "light" | "dark";
+type Theme = 'light' | 'dark';
 // Pass a default theme to ensure type correctness
-const ThemeContext: Context<Theme> = createReactContext("light");
+const ThemeContext: Context<Theme> = createReactContext('light');
 
 export class ThemeToggler extends React.Component<
   { children: Node },
   { theme: Theme }
 > {
-  state = { theme: "light" };
+  state = { theme: 'light' };
   render() {
     return (
       // Pass the current context value to the Provider's `value` prop.
@@ -19,7 +19,7 @@ export class ThemeToggler extends React.Component<
         <button
           onClick={() => {
             this.setState(state => ({
-              theme: state.theme === "light" ? "dark" : "light"
+              theme: state.theme === 'light' ? 'dark' : 'light'
             }));
           }}
         >
@@ -38,7 +38,7 @@ export class Title extends React.Component<{ children: Node }> {
       // props namespace.
       <ThemeContext.Consumer>
         {theme => (
-          <h1 style={{ color: theme === "light" ? "#000" : "#fff" }}>
+          <h1 style={{ color: theme === 'light' ? '#000' : '#fff' }}>
             {this.props.children}
           </h1>
         )}
@@ -54,13 +54,13 @@ export class Emoji extends React.Component<{ children: Node }> {
         {theme => (
           <div
             style={{
-              fontSize: "35px",
-              background: "white",
-              height: "40px",
-              width: "40px"
+              fontSize: '35px',
+              background: 'white',
+              height: '40px',
+              width: '40px'
             }}
           >
-            {theme === "light" ? "⚡️" : "🕶"}
+            {theme === 'light' ? '⚡️' : '🕶'}
           </div>
         )}
       </ThemeContext.Consumer>

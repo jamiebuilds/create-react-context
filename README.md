@@ -45,7 +45,8 @@ class ThemeToggler extends React.Component<
             this.setState(state => ({
               theme: state.theme === 'light' ? 'dark' : 'light'
             }));
-          }}>
+          }}
+        >
           Toggle theme
         </button>
         {this.props.children}

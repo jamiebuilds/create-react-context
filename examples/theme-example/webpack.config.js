@@ -1,9 +1,9 @@
 module.exports = {
-  entry: "./index.js",
+  entry: './index.js',
   output: {
-    filename: "bundle.js"
+    filename: 'bundle.js'
   },
   module: {
-    rules: [{ test: /\.js$/, use: "babel-loader" }]
+    rules: [{ test: /\.js$/, use: 'babel-loader' }]
   }
 };

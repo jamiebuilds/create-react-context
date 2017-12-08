@@ -1,7 +1,7 @@
 //@flow
-import React from "react";
-import { render } from "react-dom";
-import { ThemeToggler, Title, Emoji } from "./theme-context";
+import React from 'react';
+import { render } from 'react-dom';
+import { ThemeToggler, Title, Emoji } from './theme-context';
 
 const App = () => (
   <ThemeToggler>
@@ -10,4 +10,4 @@ const App = () => (
   </ThemeToggler>
 );
 
-render(<App />, document.getElementById("container"));
+render(<App />, document.getElementById('container'));
