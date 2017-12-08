@@ -1,6 +1,6 @@
 {
   "name": "create-react-context",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Polyfill for the proposed React context API",
   "main": "lib/index.js",
   "repository": "https://github.com/thejameskyle/create-react-context",
