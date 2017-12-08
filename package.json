@@ -24,9 +24,9 @@
     "prepublish": "yarn build",
     "commit": "lint-staged"
   },
-  "dependencies": {
-    "prop-types": "^15.6.0",
-    "react": "^16.2.0"
+  "peerDependencies": {
+    "prop-types": "^15.0.0",
+    "react": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -43,7 +43,9 @@
     "jest": "^21.2.1",
     "lint-staged": "^6.0.0",
     "prettier": "^1.9.1",
+    "prop-types": "^15.6.0",
     "raf": "^3.4.0",
+    "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
   "lint-staged": {
