@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`with provider 1`] = `
+<ThemeToggler>
+  <Provider
+    value="light"
+  >
+    <button
+      onClick={[Function]}
+    >
+      Toggle theme
+    </button>
+    <Title>
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#000",
+            }
+          }
+        >
+          Hello World
+        </h1>
+      </Consumer>
+    </Title>
+  </Provider>
+</ThemeToggler>
+`;
+
+exports[`with provider 2`] = `
+<ThemeToggler>
+  <Provider
+    value="dark"
+  >
+    <button
+      onClick={[Function]}
+    >
+      Toggle theme
+    </button>
+    <Title>
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#fff",
+            }
+          }
+        >
+          Hello World
+        </h1>
+      </Consumer>
+    </Title>
+  </Provider>
+</ThemeToggler>
+`;
+
+exports[`without provider 1`] = `
+<Title>
+  <Consumer>
+    <h1
+      style={
+        Object {
+          "color": "#fff",
+        }
+      }
+    >
+      Hello World
+    </h1>
+  </Consumer>
+</Title>
+`;

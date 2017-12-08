@@ -1,0 +1,21 @@
+// @flow
+import { Component, type Node } from 'react';
+
+export type ProviderProps<T> = {
+  value: T,
+  children?: Node
+};
+
+export type ConsumerProps<T> = {
+  children: (value: T) => Node
+};
+
+export type Provider<T> = Component<ProviderProps<T>>;
+export type Consumer<T> = Component<ConsumerProps<T>>;
+
+export type Context<T> = {
+  Provider: Class<Provider<T>>,
+  Consumer: Class<Consumer<T>>
+};
+
+declare export default function createReactContext<T>(name: string): Context<T>;
