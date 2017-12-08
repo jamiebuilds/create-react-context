@@ -2,6 +2,25 @@
 
 > Polyfill for the [proposed React context API](https://github.com/reactjs/rfcs/pull/2)
 
+## Install
+
+```sh
+yarn add create-react-context
+```
+
+You'll need to also have `react` and `prop-types` installed.
+
+## API
+
+```js
+const Context = createReactContext(defaultValue);
+// <Context.Provider value={providedValue}>{children}</Context.Provider>
+// ...
+// <Context.Consumer>{value => children}</Context.Consumer>
+```
+
+## Example
+
 ```js
 // @flow
 import React from 'react';
