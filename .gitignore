@@ -3,3 +3,5 @@ node_modules
 lib
 coverage
 .DS_Store
+*bundle.js
+package-lock.json
