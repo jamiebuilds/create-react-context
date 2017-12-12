@@ -23,5 +23,5 @@ export type Context<T> = {
 };
 
 declare export default function createReactContext<T>(
-  defaultValue: string
+  defaultValue: T
 ): Context<T>;
