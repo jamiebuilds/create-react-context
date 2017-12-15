@@ -1,16 +1,5 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "loose": true,
-        "targets": {
-          "browsers": ["last 2 versions", "ie >= 9"]
-        }
-      }
-    ],
-    "react",
-    "flow"
-  ],
-  "plugins": ["transform-class-properties", "add-module-exports"]
+    "./.babelrc.js"
+  ]
 }

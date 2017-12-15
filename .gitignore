@@ -1,6 +1,7 @@
 node_modules
 *.log
 lib
+es
 coverage
 .DS_Store
 examples/*/bundle.js
