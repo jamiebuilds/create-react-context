@@ -17,10 +17,11 @@ class ThemeToggler extends React.Component<
 > {
   state = { theme: 'light' };
   render() {
-    return (
-      // Pass the current context value to the Provider's `value` prop.
-      // Changes are detected using strict comparison (Object.is)
-      <ThemeContext.Provider value={this.state.theme}>
+    // Pass the current context value as the Provider's `value`.
+    // Changes are detected using strict comparison (Object.is)
+    return ThemeContext.provide(
+      this.state.theme,
+      <React.Fragment>
         <button
           onClick={() => {
             this.setState(state => ({
@@ -31,7 +32,7 @@ class ThemeToggler extends React.Component<
           Toggle theme
         </button>
         {this.props.children}
-      </ThemeContext.Provider>
+      </React.Fragment>
     );
   }
 }
@@ -42,17 +43,13 @@ class Title extends React.Component<{ children: Node }> {
   }
 
   render() {
-    return (
-      // The Consumer uses a render prop API. Avoids conflicts in the
-      // props namespace.
-      <ThemeContext.Consumer>
-        {theme => (
-          <h1 style={{ color: theme === 'light' ? '#000' : '#fff' }}>
-            {this.props.children}
-          </h1>
-        )}
-      </ThemeContext.Consumer>
-    );
+    // The Consumer uses a render prop API. Avoids conflicts in the
+    // props namespace.
+    return ThemeContext.consume(theme => (
+      <h1 style={{ color: theme === 'light' ? '#000' : '#fff' }}>
+        {this.props.children}
+      </h1>
+    ));
   }
 }
 
