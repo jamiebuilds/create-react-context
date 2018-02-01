@@ -7,15 +7,21 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const maybeHideChildren = (children, hiddenChildren) =>
+  hiddenChildren
+    ? React.Children.toArray(children).filter((child, i) => !hiddenChildren.includes(i))
+    : children;
+
+
 type Theme = 'light' | 'dark';
 // Pass a default theme to ensure type correctness
 const ThemeContext: Context<Theme> = createReactContext('light');
 
 class ThemeToggler extends React.Component<
   { children: Node },
-  { theme: Theme }
+  { theme: Theme, hiddenChildren: ?number[] }
 > {
-  state = { theme: 'light' };
+  state = { theme: 'light', hiddenChildren: null };
   render() {
     return (
       // Pass the current context value to the Provider's `value` prop.
@@ -30,7 +36,7 @@ class ThemeToggler extends React.Component<
         >
           Toggle theme
         </button>
-        {this.props.children}
+        {maybeHideChildren(this.props.children, this.state.hiddenChildren)}
       </ThemeContext.Provider>
     );
   }
@@ -72,3 +78,19 @@ test('with provider', () => {
   wrapper.find('button').simulate('click');
   expect(wrapper).toMatchSnapshot('with provider - after click');
 });
+
+test('unsubscribes correct consumer', () => {
+  const wrapper = mount(
+    <ThemeToggler>
+      <Title>Hello World</Title>
+      <Title>Foo</Title>
+      <Title>Bar</Title>
+    </ThemeToggler>
+  );
+
+  expect(wrapper).toMatchSnapshot();
+  wrapper.setState({ hiddenChildren: [1] });
+  expect(wrapper).toMatchSnapshot();
+  wrapper.find('button').simulate('click');
+  expect(wrapper).toMatchSnapshot();
+})

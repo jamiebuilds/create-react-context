@@ -1,6 +1,147 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`with provider - after click 1`] = `
+exports[`unsubscribes correct consumer 1`] = `
+<ThemeToggler>
+  <Provider
+    value="light"
+  >
+    <button
+      onClick={[Function]}
+    >
+      Toggle theme
+    </button>
+    <Title>
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#000",
+            }
+          }
+        >
+          Hello World
+        </h1>
+      </Consumer>
+    </Title>
+    <Title>
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#000",
+            }
+          }
+        >
+          Foo
+        </h1>
+      </Consumer>
+    </Title>
+    <Title>
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#000",
+            }
+          }
+        >
+          Bar
+        </h1>
+      </Consumer>
+    </Title>
+  </Provider>
+</ThemeToggler>
+`;
+
+exports[`unsubscribes correct consumer 2`] = `
+<ThemeToggler>
+  <Provider
+    value="light"
+  >
+    <button
+      onClick={[Function]}
+    >
+      Toggle theme
+    </button>
+    <Title
+      key=".0"
+    >
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#000",
+            }
+          }
+        >
+          Hello World
+        </h1>
+      </Consumer>
+    </Title>
+    <Title
+      key=".2"
+    >
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#000",
+            }
+          }
+        >
+          Bar
+        </h1>
+      </Consumer>
+    </Title>
+  </Provider>
+</ThemeToggler>
+`;
+
+exports[`unsubscribes correct consumer 3`] = `
+<ThemeToggler>
+  <Provider
+    value="dark"
+  >
+    <button
+      onClick={[Function]}
+    >
+      Toggle theme
+    </button>
+    <Title
+      key=".0"
+    >
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#fff",
+            }
+          }
+        >
+          Hello World
+        </h1>
+      </Consumer>
+    </Title>
+    <Title
+      key=".2"
+    >
+      <Consumer>
+        <h1
+          style={
+            Object {
+              "color": "#fff",
+            }
+          }
+        >
+          Bar
+        </h1>
+      </Consumer>
+    </Title>
+  </Provider>
+</ThemeToggler>
+`;
+
+exports[`with provider: with provider - after click 1`] = `
 <ThemeToggler>
   <Provider
     value="dark"
@@ -27,7 +168,7 @@ exports[`with provider - after click 1`] = `
 </ThemeToggler>
 `;
 
-exports[`with provider - init 1`] = `
+exports[`with provider: with provider - init 1`] = `
 <ThemeToggler>
   <Provider
     value="light"
