@@ -31,7 +31,7 @@ function createEventEmitter(value) {
     },
 
     off(handler) {
-      handlers = handlers.filter(h => h === handler);
+      handlers = handlers.filter(h => h !== handler);
     },
 
     get() {
