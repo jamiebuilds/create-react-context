@@ -2,13 +2,15 @@
 import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
 
+type RenderFn<T> = (value: T) => Node;
+
 export type ProviderProps<T> = {
   value: T,
   children?: Node
 };
 
 export type ConsumerProps<T> = {
-  children: (value: T) => Node
+  children: RenderFn<T> | [RenderFn<T>]
 };
 
 export type ConsumerState<T> = {
@@ -45,8 +47,8 @@ function createEventEmitter(value) {
   };
 }
 
-function onlyChild(children) {
-  return children[0] || children;
+function onlyChild(children): any {
+  return Array.isArray(children) ? children[0] : children;
 }
 
 let uniqueId = 0;
@@ -74,7 +76,7 @@ function createReactContext<T>(defaultValue: T): Context<T> {
     }
 
     render() {
-      return onlyChild(this.props.children);
+      return this.props.children;
     }
   }
 

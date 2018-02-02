@@ -1,13 +1,15 @@
 // @flow
 import { Component, type Node } from 'react';
 
+type RenderFn<T> = (value: T) => Node;
+
 export type ProviderProps<T> = {
   value: T,
   children?: Node
 };
 
 export type ConsumerProps<T> = {
-  children: (value: T) => Node
+  children: RenderFn<T> | [RenderFn<T>]
 };
 
 export type ConsumerState<T> = {
