@@ -45,6 +45,10 @@ function createEventEmitter(value) {
   };
 }
 
+function onlyChild(children) {
+  return children[0] || children;
+}
+
 let uniqueId = 0;
 
 function createReactContext<T>(defaultValue: T): Context<T> {
@@ -70,7 +74,7 @@ function createReactContext<T>(defaultValue: T): Context<T> {
     }
 
     render() {
-      return this.props.children;
+      return onlyChild(this.props.children);
     }
   }
 
@@ -110,7 +114,7 @@ function createReactContext<T>(defaultValue: T): Context<T> {
     };
 
     render() {
-      return this.props.children(this.state.value);
+      return onlyChild(this.props.children)(this.state.value);
     }
   }
 
