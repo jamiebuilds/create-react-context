@@ -121,8 +121,12 @@ function createReactContext<T>(defaultValue: T): Context<T> {
   }
 
   return {
-    Provider,
-    Consumer
+    provide(value, children) {
+      return <Provider value={value}>{children}</Provider>;
+    },
+    consume(render) {
+      return <Consumer>{render}</Consumer>;
+    }
   };
 }
 

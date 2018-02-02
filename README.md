@@ -14,9 +14,9 @@ You'll need to also have `react` and `prop-types` installed.
 
 ```js
 const Context = createReactContext(defaultValue);
-// <Context.Provider value={providedValue}>{children}</Context.Provider>
+// Context.provide(providedValue, children)
 // ...
-// <Context.Consumer>{value => children}</Context.Consumer>
+// Context.consume(value => children)
 ```
 
 ## Example
@@ -36,38 +36,35 @@ class ThemeToggler extends React.Component<
 > {
   state = { theme: 'light' };
   render() {
-    return (
-      // Pass the current context value to the Provider's `value` prop.
-      // Changes are detected using strict comparison (Object.is)
-      <ThemeContext.Provider value={this.state.theme}>
-        <button
-          onClick={() => {
-            this.setState(state => ({
-              theme: state.theme === 'light' ? 'dark' : 'light'
-            }));
-          }}
-        >
-          Toggle theme
-        </button>
-        {this.props.children}
-      </ThemeContext.Provider>
+    // Pass the current context value as the Provider's `value`.
+    // Changes are detected using strict comparison (Object.is)
+    return ThemeContext.provide(this.state.theme,
+        <React.Fragment>
+          <button
+            onClick={() => {
+              this.setState(state => ({
+                theme: state.theme === 'light' ? 'dark' : 'light'
+              }));
+            }}
+          >
+            Toggle theme
+          </button>
+          {this.props.children}
+        </React.Fragment>
+      )
     );
   }
 }
 
 class Title extends React.Component<{ children: Node }> {
   render() {
-    return (
-      // The Consumer uses a render prop API. Avoids conflicts in the
-      // props namespace.
-      <ThemeContext.Consumer>
-        {theme => (
-          <h1 style={{ color: theme === 'light' ? '#000' : '#fff' }}>
-            {this.props.children}
-          </h1>
-        )}
-      </ThemeContext.Consumer>
-    );
+    // The Consumer uses a render prop API. Avoids conflicts in the
+    // props namespace.
+    return ThemeContext.consume(theme => (
+      <h1 style={{ color: theme === 'light' ? '#000' : '#fff' }}>
+        {this.props.children}
+      </h1>
+    ));
   }
 }
 ```
