@@ -60,5 +60,7 @@
       "enzyme-to-json/serializer"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "gud": "^1.0.0"
+  }
 }

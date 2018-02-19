@@ -1,6 +1,7 @@
 // @flow
 import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
+import gud from 'gud';
 
 type RenderFn<T> = (value: T) => Node;
 
@@ -51,10 +52,8 @@ function onlyChild(children): any {
   return Array.isArray(children) ? children[0] : children;
 }
 
-let uniqueId = 0;
-
 function createReactContext<T>(defaultValue: T): Context<T> {
-  const contextProp = '__create-react-context-' + uniqueId++ + '__';
+  const contextProp = '__create-react-context-' + gud() + '__';
 
   class Provider extends Component<ProviderProps<T>> {
     emitter = createEventEmitter(this.props.value);
