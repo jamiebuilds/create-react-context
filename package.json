@@ -59,10 +59,7 @@
   "jest": {
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
-    ],
-    "globals": {
-      "__DEV__": true
-    }
+    ]
   },
   "dependencies": {}
 }

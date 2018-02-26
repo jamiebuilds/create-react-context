@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import MAX_SIGNED_31_BIT_INT from './maxSigned31BitInt';
 import warning from 'fbjs/lib/warning';
 
-declare var __DEV__: boolean;
-
 type RenderFn<T> = (value: T) => Node;
 
 export type ProviderProps<T> = {
@@ -98,7 +96,7 @@ function createReactContext<T>(
             typeof calculateChangedBits === 'function'
               ? calculateChangedBits(oldValue, newValue)
               : MAX_SIGNED_31_BIT_INT;
-          if (__DEV__) {
+          if (process.env !== 'production') {
             warning(
               (changedBits & MAX_SIGNED_31_BIT_INT) === changedBits,
               'calculateChangedBits: Expected the return value to be a ' +

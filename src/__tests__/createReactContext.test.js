@@ -5,8 +5,6 @@ import React, { type Node } from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-declare var __DEV__: boolean;
-
 Enzyme.configure({ adapter: new Adapter() });
 
 type Theme = 'light' | 'dark';
@@ -200,7 +198,7 @@ test('warns if calculateChangedBits returns larger than a 31-bit integer', () =>
 
   wrapper.unmount();
 
-  if (__DEV__) {
+  if (process.env !== 'production') {
     expect(console.error).toHaveBeenCalledTimes(1)
     expect(console.error).lastCalledWith('Warning: calculateChangedBits: Expected the return value to be a 31-bit integer. Instead received: 4294967295')
   }
