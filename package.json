@@ -1,14 +1,22 @@
 {
   "name": "create-react-context",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Polyfill for the proposed React context API",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "repository": "https://github.com/thejameskyle/create-react-context",
   "author": "James Kyle <me@thejameskyle.com>",
   "license": "MIT",
-  "keywords": ["react", "context", "contextTypes", "polyfill", "ponyfill"],
-  "files": ["lib"],
+  "keywords": [
+    "react",
+    "context",
+    "contextTypes",
+    "polyfill",
+    "ponyfill"
+  ],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "jest",
     "flow": "flow",
@@ -46,9 +54,14 @@
     "react-dom": "^16.2.0"
   },
   "lint-staged": {
-    "*.{js,md,json,js.flow,d.ts}": ["prettier --write", "git add"]
+    "*.{js,md,json,js.flow,d.ts}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "jest": {
-    "snapshotSerializers": ["enzyme-to-json/serializer"]
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   }
 }
