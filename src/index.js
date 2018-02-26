@@ -2,6 +2,8 @@
 import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
 import gud from 'gud';
+import warning from 'fbjs/lib/warning';
+import MAX_SIGNED_31_BIT_INT from './maxSigned31BitInt';
 
 type RenderFn<T> = (value: T) => Node;
 
@@ -11,7 +13,8 @@ export type ProviderProps<T> = {
 };
 
 export type ConsumerProps<T> = {
-  children: RenderFn<T> | [RenderFn<T>]
+  children: RenderFn<T> | [RenderFn<T>],
+  observedBits?: number
 };
 
 export type ConsumerState<T> = {
@@ -41,9 +44,9 @@ function createEventEmitter(value) {
       return value;
     },
 
-    set(newValue) {
+    set(newValue, changedBits) {
       value = newValue;
-      handlers.forEach(handler => handler(value));
+      handlers.forEach(handler => handler(value, changedBits));
     }
   };
 }
@@ -52,7 +55,10 @@ function onlyChild(children): any {
   return Array.isArray(children) ? children[0] : children;
 }
 
-function createReactContext<T>(defaultValue: T): Context<T> {
+function createReactContext<T>(
+  defaultValue: T,
+  calculateChangedBits: ?(a: T, b: T) => number
+): Context<T> {
   const contextProp = '__create-react-context-' + gud() + '__';
 
   class Provider extends Component<ProviderProps<T>> {
@@ -70,7 +76,39 @@ function createReactContext<T>(defaultValue: T): Context<T> {
 
     componentWillReceiveProps(nextProps) {
       if (this.props.value !== nextProps.value) {
-        this.emitter.set(nextProps.value);
+        const oldProps = this.props;
+        const { value: newValue } = nextProps;
+        let changedBits: number;
+        const oldValue = oldProps.value;
+        // Use Object.is to compare the new context value to the old value.
+        // Inlined Object.is polyfill.
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+        if (
+          (oldValue === newValue &&
+            (oldValue !== 0 || 1 / oldValue === 1 / newValue)) ||
+          (oldValue !== oldValue && newValue !== newValue) // eslint-disable-line no-self-compare
+        ) {
+          // No change.
+          changedBits = 0;
+        } else {
+          changedBits =
+            typeof calculateChangedBits === 'function'
+              ? calculateChangedBits(oldValue, newValue)
+              : MAX_SIGNED_31_BIT_INT;
+          if (process.env.NODE_ENV !== 'production') {
+            warning(
+              (changedBits & MAX_SIGNED_31_BIT_INT) === changedBits,
+              'calculateChangedBits: Expected the return value to be a ' +
+                '31-bit integer. Instead received: %s',
+              changedBits
+            );
+          }
+          changedBits |= 0;
+
+          if (changedBits !== 0) {
+            this.emitter.set(nextProps.value, changedBits);
+          }
+        }
       }
     }
 
@@ -84,14 +122,29 @@ function createReactContext<T>(defaultValue: T): Context<T> {
       [contextProp]: PropTypes.object
     };
 
+    observedBits: number;
+
     state: ConsumerState<T> = {
       value: this.getValue()
     };
+
+    componentWillReceiveProps(nextProps) {
+      const { observedBits } = nextProps
+      this.observedBits = observedBits === undefined || observedBits === null
+        // Subscribe to all changes by default
+        ? MAX_SIGNED_31_BIT_INT
+        : observedBits
+    }
 
     componentDidMount() {
       if (this.context[contextProp]) {
         this.context[contextProp].on(this.onUpdate);
       }
+      const { observedBits } = this.props
+      this.observedBits = observedBits === undefined || observedBits === null
+        // Subscribe to all changes by default
+        ? MAX_SIGNED_31_BIT_INT
+        : observedBits
     }
 
     componentWillUnmount() {
@@ -108,10 +161,11 @@ function createReactContext<T>(defaultValue: T): Context<T> {
       }
     }
 
-    onUpdate = () => {
-      this.setState({
-        value: this.getValue()
-      });
+    onUpdate = (newValue, changedBits : number) => {
+      const observedBits: number = this.observedBits | 0;
+      if ((observedBits & changedBits) !== 0) {
+        this.setState({ value: this.getValue() })
+      }
     };
 
     render() {
