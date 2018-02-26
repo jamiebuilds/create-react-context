@@ -1,8 +1,9 @@
 // @flow
 import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
-import MAX_SIGNED_31_BIT_INT from './maxSigned31BitInt';
+import gud from 'gud';
 import warning from 'fbjs/lib/warning';
+import MAX_SIGNED_31_BIT_INT from './maxSigned31BitInt';
 
 type RenderFn<T> = (value: T) => Node;
 
@@ -54,13 +55,11 @@ function onlyChild(children): any {
   return Array.isArray(children) ? children[0] : children;
 }
 
-let uniqueId = 0;
-
 function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
-  const contextProp = '__create-react-context-' + uniqueId++ + '__';
+  const contextProp = '__create-react-context-' + gud() + '__';
 
   class Provider extends Component<ProviderProps<T>> {
     emitter = createEventEmitter(this.props.value);
