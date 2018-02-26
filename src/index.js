@@ -3,7 +3,18 @@ import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
 import gud from 'gud';
 import warning from 'fbjs/lib/warning';
-import MAX_SIGNED_31_BIT_INT from './maxSigned31BitInt';
+
+const MAX_SIGNED_31_BIT_INT = 1073741823;
+
+// Inlined Object.is polyfill.
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+function objectIs(x, y) {
+  if (x === y) {
+    return x !== 0 || 1 / x === 1 / (y: any);
+  } else {
+    return x !== x && y !== y;
+  }
+}
 
 type RenderFn<T> = (value: T) => Node;
 
@@ -76,20 +87,12 @@ function createReactContext<T>(
 
     componentWillReceiveProps(nextProps) {
       if (this.props.value !== nextProps.value) {
-        const oldProps = this.props;
-        const { value: newValue } = nextProps;
+        let oldValue = this.props.value;
+        let newValue = nextProps.value;
         let changedBits: number;
-        const oldValue = oldProps.value;
-        // Use Object.is to compare the new context value to the old value.
-        // Inlined Object.is polyfill.
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-        if (
-          (oldValue === newValue &&
-            (oldValue !== 0 || 1 / oldValue === 1 / newValue)) ||
-          (oldValue !== oldValue && newValue !== newValue) // eslint-disable-line no-self-compare
-        ) {
-          // No change.
-          changedBits = 0;
+
+        if (objectIs(oldValue, newValue)) {
+          changedBits = 0; // No change
         } else {
           changedBits =
             typeof calculateChangedBits === 'function'
@@ -103,6 +106,7 @@ function createReactContext<T>(
               changedBits
             );
           }
+
           changedBits |= 0;
 
           if (changedBits !== 0) {
@@ -129,22 +133,22 @@ function createReactContext<T>(
     };
 
     componentWillReceiveProps(nextProps) {
-      const { observedBits } = nextProps
-      this.observedBits = observedBits === undefined || observedBits === null
-        // Subscribe to all changes by default
-        ? MAX_SIGNED_31_BIT_INT
-        : observedBits
+      let { observedBits } = nextProps;
+      this.observedBits =
+        observedBits === undefined || observedBits === null
+          ? MAX_SIGNED_31_BIT_INT // Subscribe to all changes by default
+          : observedBits;
     }
 
     componentDidMount() {
       if (this.context[contextProp]) {
         this.context[contextProp].on(this.onUpdate);
       }
-      const { observedBits } = this.props
-      this.observedBits = observedBits === undefined || observedBits === null
-        // Subscribe to all changes by default
-        ? MAX_SIGNED_31_BIT_INT
-        : observedBits
+      let { observedBits } = this.props;
+      this.observedBits =
+        observedBits === undefined || observedBits === null
+          ? MAX_SIGNED_31_BIT_INT // Subscribe to all changes by default
+          : observedBits;
     }
 
     componentWillUnmount() {
@@ -161,10 +165,10 @@ function createReactContext<T>(
       }
     }
 
-    onUpdate = (newValue, changedBits : number) => {
+    onUpdate = (newValue, changedBits: number) => {
       const observedBits: number = this.observedBits | 0;
       if ((observedBits & changedBits) !== 0) {
-        this.setState({ value: this.getValue() })
+        this.setState({ value: this.getValue() });
       }
     };
 
