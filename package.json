@@ -64,5 +64,7 @@
       "__DEV__": true
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "gud": "^1.0.0"
+  }
 }
