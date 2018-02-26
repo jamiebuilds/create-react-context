@@ -12,5 +12,5 @@
     "react",
     "flow"
   ],
-  "plugins": ["transform-class-properties", "add-module-exports"]
+  "plugins": ["transform-class-properties", "add-module-exports", "babel-preset-fbjs/plugins/dev-expression"]
 }

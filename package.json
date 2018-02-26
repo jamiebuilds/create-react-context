@@ -34,6 +34,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-fbjs": "^2.1.4",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "enzyme": "^3.2.0",
@@ -58,7 +59,10 @@
   "jest": {
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
-    ]
+    ],
+    "globals": {
+      "__DEV__": true
+    }
   },
   "dependencies": {}
 }
