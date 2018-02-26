@@ -95,7 +95,7 @@ function createReactContext<T>(
             typeof calculateChangedBits === 'function'
               ? calculateChangedBits(oldValue, newValue)
               : MAX_SIGNED_31_BIT_INT;
-          if (process.env !== 'production') {
+          if (process.env.NODE_ENV !== 'production') {
             warning(
               (changedBits & MAX_SIGNED_31_BIT_INT) === changedBits,
               'calculateChangedBits: Expected the return value to be a ' +
