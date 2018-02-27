@@ -1,6 +1,6 @@
 // @flow
 import 'raf/polyfill';
-import createReactContext, { type Context } from '../';
+import createReactContext, { type Context } from '../implementation';
 import React, { type Node } from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -74,9 +74,9 @@ test('with provider', () => {
 });
 
 test('can skip consumers with bitmask', () => {
-  let renders = { Foo: 0, Bar: 0 }
+  let renders = { Foo: 0, Bar: 0 };
 
-  const Context = createReactContext({foo: 0, bar: 0}, (a, b) => {
+  const Context = createReactContext({ foo: 0, bar: 0 }, (a, b) => {
     let result = 0;
     if (a.foo !== b.foo) {
       result |= 0b01;
@@ -89,7 +89,7 @@ test('can skip consumers with bitmask', () => {
 
   function Provider(props) {
     return (
-      <Context.Provider value={{foo: props.foo, bar: props.bar}}>
+      <Context.Provider value={{ foo: props.foo, bar: props.bar }}>
         {props.children}
       </Context.Provider>
     );
@@ -99,7 +99,7 @@ test('can skip consumers with bitmask', () => {
     return (
       <Context.Consumer observedBits={0b01}>
         {value => {
-          renders.Foo += 1
+          renders.Foo += 1;
           return <span prop={'Foo: ' + value.foo} />;
         }}
       </Context.Consumer>
@@ -110,7 +110,7 @@ test('can skip consumers with bitmask', () => {
     return (
       <Context.Consumer observedBits={0b10}>
         {value => {
-          renders.Bar += 1
+          renders.Bar += 1;
           return <span prop={'Bar: ' + value.bar} />;
         }}
       </Context.Consumer>
@@ -142,54 +142,46 @@ test('can skip consumers with bitmask', () => {
   }
 
   const wrapper = mount(<App foo={1} bar={1} />);
-  expect(renders.Foo).toBe(1)
-  expect(renders.Bar).toBe(1)
-  expect(wrapper.contains(
-    <span prop='Foo: 1' />,
-    <span prop='Bar: 1' />,
-  )).toBe(true)
+  expect(renders.Foo).toBe(1);
+  expect(renders.Bar).toBe(1);
+  expect(wrapper.contains(<span prop="Foo: 1" />, <span prop="Bar: 1" />)).toBe(
+    true
+  );
 
   // Update only foo
-  wrapper.setProps({ foo: 2, bar: 1 })
-  expect(renders.Foo).toBe(2)
-  expect(renders.Bar).toBe(1)
-  expect(wrapper.contains(
-    <span prop='Foo: 2' />,
-    <span prop='Bar: 1' />,
-  )).toBe(true)
+  wrapper.setProps({ foo: 2, bar: 1 });
+  expect(renders.Foo).toBe(2);
+  expect(renders.Bar).toBe(1);
+  expect(wrapper.contains(<span prop="Foo: 2" />, <span prop="Bar: 1" />)).toBe(
+    true
+  );
 
   // Update only bar
-  wrapper.setProps({ bar: 2, foo: 2 })
-  expect(renders.Foo).toBe(2)
-  expect(renders.Bar).toBe(2)
-  expect(wrapper.contains(
-    <span prop='Foo: 2' />,
-    <span prop='Bar: 2' />,
-  )).toBe(true)
+  wrapper.setProps({ bar: 2, foo: 2 });
+  expect(renders.Foo).toBe(2);
+  expect(renders.Bar).toBe(2);
+  expect(wrapper.contains(<span prop="Foo: 2" />, <span prop="Bar: 2" />)).toBe(
+    true
+  );
 
   // Update both
-  wrapper.setProps({ bar: 3, foo: 3 })
-  expect(renders.Foo).toBe(3)
-  expect(renders.Bar).toBe(3)
-  expect(wrapper.contains(
-    <span prop='Foo: 3' />,
-    <span prop='Bar: 3' />,
-  ))
+  wrapper.setProps({ bar: 3, foo: 3 });
+  expect(renders.Foo).toBe(3);
+  expect(renders.Bar).toBe(3);
+  expect(wrapper.contains(<span prop="Foo: 3" />, <span prop="Bar: 3" />));
 });
 
 test('warns if calculateChangedBits returns larger than a 31-bit integer', () => {
-  jest.spyOn(global.console, 'error')
+  jest.spyOn(global.console, 'error');
 
   const Context = createReactContext(
     0,
-    (a, b) => Math.pow(2, 32) - 1, // Return 32 bit int
+    (a, b) => Math.pow(2, 32) - 1 // Return 32 bit int
   );
 
   const wrapper = mount(
     <Context.Provider value={1}>
-      <Context.Consumer>{
-        value => value
-      }</Context.Consumer>
+      <Context.Consumer>{value => value}</Context.Consumer>
     </Context.Provider>
   );
 
@@ -199,7 +191,9 @@ test('warns if calculateChangedBits returns larger than a 31-bit integer', () =>
   wrapper.unmount();
 
   if (process.env.NODE_ENV !== 'production') {
-    expect(console.error).toHaveBeenCalledTimes(1)
-    expect(console.error).lastCalledWith('Warning: calculateChangedBits: Expected the return value to be a 31-bit integer. Instead received: 4294967295')
+    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).lastCalledWith(
+      'Warning: calculateChangedBits: Expected the return value to be a 31-bit integer. Instead received: 4294967295'
+    );
   }
 });

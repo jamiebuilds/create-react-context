@@ -1,6 +1,9 @@
 import * as React from 'react';
 
-export default function createReactContext<T>(defaultValue: T): Context<T>;
+export default function createReactContext<T>(
+  defaultValue: T,
+  calculateChangedBits?: (prev: T, next: T) => number
+): Context<T>;
 
 type RenderFn<T> = (value: T) => React.ReactNode;
 
@@ -16,4 +19,5 @@ export type ProviderProps<T> = {
 
 export type ConsumerProps<T> = {
   children: RenderFn<T> | [RenderFn<T>];
+  observedBits?: number;
 };

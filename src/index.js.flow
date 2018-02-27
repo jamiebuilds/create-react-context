@@ -10,7 +10,7 @@ export type ProviderProps<T> = {
 
 export type ConsumerProps<T> = {
   children: RenderFn<T> | [RenderFn<T>],
-  observedProps?: number,
+  observedBits?: number
 };
 
 export type ConsumerState<T> = {
@@ -27,5 +27,5 @@ export type Context<T> = {
 
 declare export default function createReactContext<T>(
   defaultValue: T,
-  calculateChangedBits: ?(a : T, b: T) => number
+  calculateChangedBits?: (prev: T, next: T) => number
 ): Context<T>;
