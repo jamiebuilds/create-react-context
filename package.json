@@ -7,16 +7,8 @@
   "repository": "https://github.com/thejameskyle/create-react-context",
   "author": "James Kyle <me@thejameskyle.com>",
   "license": "MIT",
-  "keywords": [
-    "react",
-    "context",
-    "contextTypes",
-    "polyfill",
-    "ponyfill"
-  ],
-  "files": [
-    "lib"
-  ],
+  "keywords": ["react", "context", "contextTypes", "polyfill", "ponyfill"],
+  "files": ["lib"],
   "scripts": {
     "test": "jest",
     "flow": "flow",
@@ -27,11 +19,12 @@
   },
   "dependencies": {
     "fbjs": "^0.8.0",
-    "gud": "^1.0.0"
+    "gud": "^1.0.0",
+    "react-dot-fragment": "^0.2.2"
   },
   "peerDependencies": {
     "prop-types": "^15.0.0",
-    "react": "^14.0.0 || ^15.0.0 || ^16.0.0"
+    "react": "^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -54,14 +47,9 @@
     "react-dom": "^16.2.0"
   },
   "lint-staged": {
-    "*.{js,md,json,js.flow,d.ts}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,md,json,js.flow,d.ts}": ["prettier --write", "git add"]
   },
   "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
+    "snapshotSerializers": ["enzyme-to-json/serializer"]
   }
 }
