@@ -3074,6 +3074,10 @@ react-dom@^16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+react-dot-fragment@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-dot-fragment/-/react-dot-fragment-0.2.2.tgz#5ca16a7c42a944577dc5a9d170cfb29212c7aebb"
+
 react-test-renderer@^16.0.0-0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.2.0.tgz#bddf259a6b8fcd8555f012afc8eacc238872a211"

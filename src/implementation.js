@@ -3,6 +3,7 @@ import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
 import gud from 'gud';
 import warning from 'fbjs/lib/warning';
+import Fragment from 'react-dot-fragment';
 
 const MAX_SIGNED_31_BIT_INT = 1073741823;
 
@@ -117,7 +118,7 @@ function createReactContext<T>(
     }
 
     render() {
-      return this.props.children;
+      return <Fragment>{this.props.children}</Fragment>;
     }
   }
 
@@ -173,7 +174,9 @@ function createReactContext<T>(
     };
 
     render() {
-      return onlyChild(this.props.children)(this.state.value);
+      return (
+        <Fragment>{onlyChild(this.props.children)(this.state.value)}</Fragment>
+      );
     }
   }
 
