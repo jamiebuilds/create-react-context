@@ -183,4 +183,4 @@ function createReactContext<T>(
   };
 }
 
-export default React.createContext || createReactContext;
+export default createReactContext;
