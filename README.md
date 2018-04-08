@@ -74,7 +74,7 @@ class Title extends React.Component<{ children: Node }> {
 
 ## Usage with React 15 and below
 
-`Provider` just returns its children in its `render` method, and `Consumer` returns the result of child function call. This means that whatever value you give as `Provider` children, or return from `Consumer` child function, it should be a valid `render` return type for your current React version. For React 15, it includes React element, boolean, or null, but doesn't include fragments (arrays), strings, or numbers.
+`Provider` just returns its children in its `render` method, and `Consumer` returns the result of child function call. This means that whatever value you give as `Provider` children, or return from `Consumer` child function, it should be a valid `render` return type for your current React version. For React 15, it includes React element, boolean, and null, but doesn't include fragments (arrays), strings, or numbers.
 
 
 ```js
