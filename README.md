@@ -72,52 +72,19 @@ class Title extends React.Component<{ children: Node }> {
 }
 ```
 
-## Usage with React 15 and below
+## Compatibility
 
-`Provider` just returns its children in its `render` method, and `Consumer` returns the result of child function call. This means that whatever value you give as `Provider` children, or return from `Consumer` child function, it should be a valid `render` return type for your current React version. For React 15, it includes React element, boolean, and null, but doesn't include fragments (arrays), strings, or numbers.
+This package only "ponyfills" the `React.createContext` API, not other
+unrelated React 16+ APIs. If you are using a version of React <16, keep
+in mind that you can only use features available in that version.
 
-
-```js
-// Works in React 15 and below
-
-<Context.Provider><span>foo</span></Context.Provider>
-
-<Context.Provider>
-  <div>
-    <div/>
-    <div/>
-  </div>
-</Context.Provider>
-
-<Context.Consumer>{value => <span>{Number(value)}</span>}</Context.Consumer>
-
-<Context.Consumer>
-  {value => (
-    <div>
-      <div/>
-      <div/>
-    </div>
-  )}
-</Context.Consumer>
-```
+For example, you cannot pass children types aren't valid pre React 16:
 
 ```js
-// Doesn't work in React 15 and below
-
-<Context.Provider>foo</Context.Provider>
-
 <Context.Provider>
   <div/>
   <div/>
 </Context.Provider>
-
-<Context.Consumer>{value => Number(value)}</Context.Consumer>
-
-<Context.Consumer>
-  {value => [
-    <div/>,
-    <div/>
-  ]}
-</Context.Consumer>
 ```
+
 
