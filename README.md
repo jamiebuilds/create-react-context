@@ -87,4 +87,13 @@ For example, you cannot pass children types aren't valid pre React 16:
 </Context.Provider>
 ```
 
+It will throw `A valid React element (or null) must be returned. You may have returned undefined, an array or some other invalid object.` because `<Context.Provider>` can only receive a single child element. To fix the error just wrap everyting in a single `<div>`:
 
+```js
+<Context.Provider>
+  <div>
+    <div/>
+    <div/>
+  </div>
+</Context.Provider>
+```
