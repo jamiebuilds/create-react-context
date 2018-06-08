@@ -48,10 +48,7 @@ function createEventEmitter(value) {
     },
 
     off(handler) {
-      let index = handlers.indexOf(handler) ;//only remove matched handler
-      if(i !== -1){ 
-         handlers.splice(i, 1);
-      }
+       handlers = handlers.filter(h => h !== handler);
     },
 
     get() {
@@ -73,14 +70,21 @@ function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
-  let emitter; // Provider and Consumer share an internal inaccessible emitter, no more getChildContext or contextTypes
+  let emitter; // Provider and Consumer share an internal inaccessible emitter
   class Provider extends Component<ProviderProps<T>> {
+    static childContextTypes = {
+       [contextProp]: PropTypes.string.isRequired
+    };
     constructor(props, context){
         super(props, context);
         emitter = createEventEmitter(props.value);
     }
-  
-
+    
+    getChildContext() {
+       return {
+          [contextProp]: contextProp
+       }
+    }
     componentWillReceiveProps(nextProps) {
       if (this.props.value !== nextProps.value) {
         let oldValue = this.props.value;
@@ -106,7 +110,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            emitter.set(nextProps.value, changedBits);//Notify all consumers to update
+             emitter.set(nextProps.value, changedBits);//Notify all consumers to update
           }
         }
       }
@@ -118,13 +122,15 @@ function createReactContext<T>(
   }
 
   class Consumer extends Component<ConsumerProps<T>, ConsumerState<T>> {
+    static contextTypes = {
+      [contextProp]: PropTypes.string
+    };
 
     observedBits: number;
-
     state: ConsumerState<T> = {
       value: this.getValue()
     };
-
+   
     componentWillReceiveProps(nextProps) {
       let { observedBits } = nextProps;
       this.observedBits =
@@ -134,7 +140,7 @@ function createReactContext<T>(
     }
 
     componentDidMount() {
-      if (emitter) {
+      if (this.context[contextProp]) {
          emitter.on(this.onUpdate);
       }
       let { observedBits } = this.props;
@@ -145,17 +151,17 @@ function createReactContext<T>(
     }
 
     componentWillUnmount() {
-      if (emitter) {
-         emitter.off(this.onUpdate);
-      }
+       if (this.context[contextProp]) {
+           emitter.off(this.onUpdate);
+       }
     }
 
     getValue(): T {
-      if (emitter) {
-        return emitter.get();
-      } else {
-        return defaultValue;
-      }
+       if (this.context[contextProp]) {
+           return emitter.get();
+        } else {
+           return defaultValue;
+       }
     }
 
     onUpdate = (newValue, changedBits: number) => {
