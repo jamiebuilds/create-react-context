@@ -48,7 +48,10 @@ function createEventEmitter(value) {
     },
 
     off(handler) {
-      handlers = handlers.filter(h => h !== handler);
+      let index = handlers.indexOf(handler) ;//only remove matched handler
+      if(i !== -1){ 
+         handlers.splice(i, 1);
+      }
     },
 
     get() {
@@ -70,20 +73,13 @@ function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
-  const contextProp = '__create-react-context-' + gud() + '__';
-
+  let emitter; // Provider and Consumer share an internal inaccessible emitter, no more getChildContext or contextTypes
   class Provider extends Component<ProviderProps<T>> {
-    emitter = createEventEmitter(this.props.value);
-
-    static childContextTypes = {
-      [contextProp]: PropTypes.object.isRequired
-    };
-
-    getChildContext() {
-      return {
-        [contextProp]: this.emitter
-      };
+    constructor(props, context){
+        super(props, context);
+        emitter = createEventEmitter(props.value);
     }
+  
 
     componentWillReceiveProps(nextProps) {
       if (this.props.value !== nextProps.value) {
@@ -110,7 +106,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            this.emitter.set(nextProps.value, changedBits);
+            emitter.set(nextProps.value, changedBits);//Notify all consumers to update
           }
         }
       }
@@ -122,9 +118,6 @@ function createReactContext<T>(
   }
 
   class Consumer extends Component<ConsumerProps<T>, ConsumerState<T>> {
-    static contextTypes = {
-      [contextProp]: PropTypes.object
-    };
 
     observedBits: number;
 
@@ -141,8 +134,8 @@ function createReactContext<T>(
     }
 
     componentDidMount() {
-      if (this.context[contextProp]) {
-        this.context[contextProp].on(this.onUpdate);
+      if (emitter) {
+         emitter.on(this.onUpdate);
       }
       let { observedBits } = this.props;
       this.observedBits =
@@ -152,14 +145,14 @@ function createReactContext<T>(
     }
 
     componentWillUnmount() {
-      if (this.context[contextProp]) {
-        this.context[contextProp].off(this.onUpdate);
+      if (emitter) {
+         emitter.off(this.onUpdate);
       }
     }
 
     getValue(): T {
-      if (this.context[contextProp]) {
-        return this.context[contextProp].get();
+      if (emitter) {
+        return emitter.get();
       } else {
         return defaultValue;
       }
