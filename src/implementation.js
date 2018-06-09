@@ -71,6 +71,8 @@ function createReactContext<T>(
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
   let emitter; // Provider and Consumer share an internal inaccessible emitter
+  const contextProp = '__create-react-context-' + gud() + '__';
+
   class Provider extends Component<ProviderProps<T>> {
     static childContextTypes = {
        [contextProp]: PropTypes.string.isRequired
