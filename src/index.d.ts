@@ -7,9 +7,9 @@ declare function createReactContext<T>(
   calculateChangedBits?: (prev: T, next: T) => number
 ): createReactContext.Context<T>;
 
-type RenderFn<T> = (value: T) => React.ReactNode;
-
 declare namespace createReactContext {
+  type RenderFn<T> = (value: T) => React.ReactNode;
+
   export type Context<T> = {
     Provider: React.ComponentClass<ProviderProps<T>>;
     Consumer: React.ComponentClass<ConsumerProps<T>>;
