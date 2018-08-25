@@ -26,8 +26,8 @@
     "commit": "lint-staged"
   },
   "dependencies": {
-    "fbjs": "^0.8.0",
-    "gud": "^1.0.0"
+    "gud": "^1.0.0",
+    "warning": "^4.0.3"
   },
   "peerDependencies": {
     "prop-types": "^15.0.0",

@@ -2,7 +2,7 @@
 import React, { Component, type Node } from 'react';
 import PropTypes from 'prop-types';
 import gud from 'gud';
-import warning from 'fbjs/lib/warning';
+import warning from 'warning';
 
 const MAX_SIGNED_31_BIT_INT = 1073741823;
 
