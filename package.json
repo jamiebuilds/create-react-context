@@ -1,10 +1,10 @@
 {
-  "name": "create-react-context",
+  "name": "@ant-design/create-react-context",
   "version": "0.2.3",
-  "description": "Polyfill for the proposed React context API",
+  "description": "A fork of create-react-context in MIT license",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "repository": "https://github.com/thejameskyle/create-react-context",
+  "repository": "https://github.com/ant-design/create-react-context",
   "author": "James Kyle <me@thejameskyle.com>",
   "license": "MIT",
   "keywords": [
