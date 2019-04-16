@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/create-react-context",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A fork of create-react-context in MIT license",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
