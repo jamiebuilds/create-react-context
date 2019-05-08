@@ -1,7 +1,5 @@
 // @flow
 import React, { Component, type Node } from 'react';
-import PropTypes from 'prop-types';
-import gud from 'gud';
 import warning from 'warning';
 
 const MAX_SIGNED_31_BIT_INT = 1073741823;
@@ -57,6 +55,7 @@ function createEventEmitter(value) {
 
     set(newValue, changedBits) {
       value = newValue;
+      console.log(value);
       handlers.forEach(handler => handler(value, changedBits));
     }
   };
@@ -70,19 +69,12 @@ function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
-  const contextProp = '__create-react-context-' + gud() + '__';
+  let __createReactContextZgo321__;
 
   class Provider extends Component<ProviderProps<T>> {
-    emitter = createEventEmitter(this.props.value);
-
-    static childContextTypes = {
-      [contextProp]: PropTypes.object.isRequired
-    };
-
-    getChildContext() {
-      return {
-        [contextProp]: this.emitter
-      };
+    constructor(props){
+      super(props);
+      __createReactContextZgo321__ = createEventEmitter(this.props.value);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -110,7 +102,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            this.emitter.set(nextProps.value, changedBits);
+            __createReactContextZgo321__.set(nextProps.value, changedBits);
           }
         }
       }
@@ -122,10 +114,6 @@ function createReactContext<T>(
   }
 
   class Consumer extends Component<ConsumerProps<T>, ConsumerState<T>> {
-    static contextTypes = {
-      [contextProp]: PropTypes.object
-    };
-
     observedBits: number;
 
     state: ConsumerState<T> = {
@@ -141,8 +129,8 @@ function createReactContext<T>(
     }
 
     componentDidMount() {
-      if (this.context[contextProp]) {
-        this.context[contextProp].on(this.onUpdate);
+      if (__createReactContextZgo321__) {
+        __createReactContextZgo321__.on(this.onUpdate);
       }
       let { observedBits } = this.props;
       this.observedBits =
@@ -152,14 +140,14 @@ function createReactContext<T>(
     }
 
     componentWillUnmount() {
-      if (this.context[contextProp]) {
-        this.context[contextProp].off(this.onUpdate);
+      if (__createReactContextZgo321__) {
+        __createReactContextZgo321__.off(this.onUpdate);
       }
     }
 
     getValue(): T {
-      if (this.context[contextProp]) {
-        return this.context[contextProp].get();
+      if (__createReactContextZgo321__) {
+        return __createReactContextZgo321__.get();
       } else {
         return defaultValue;
       }
