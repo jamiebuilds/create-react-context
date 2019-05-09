@@ -69,12 +69,12 @@ function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
-  let __createReactContextZgo321__;
+  let __createReactContextZgo321__ = [];
 
   class Provider extends Component<ProviderProps<T>> {
     constructor(props){
       super(props);
-      __createReactContextZgo321__ = createEventEmitter(this.props.value);
+      __createReactContextZgo321__[__createReactContextZgo321__.length++] = createEventEmitter(this.props.value);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -102,7 +102,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            __createReactContextZgo321__.set(nextProps.value, changedBits);
+            __createReactContextZgo321__[__createReactContextZgo321__-1].set(nextProps.value, changedBits);
           }
         }
       }
@@ -129,8 +129,8 @@ function createReactContext<T>(
     }
 
     componentDidMount() {
-      if (__createReactContextZgo321__) {
-        __createReactContextZgo321__.on(this.onUpdate);
+      if (__createReactContextZgo321__.length>0) {
+        __createReactContextZgo321__[__createReactContextZgo321__.length-1].on(this.onUpdate);
       }
       let { observedBits } = this.props;
       this.observedBits =
@@ -140,14 +140,14 @@ function createReactContext<T>(
     }
 
     componentWillUnmount() {
-      if (__createReactContextZgo321__) {
-        __createReactContextZgo321__.off(this.onUpdate);
+      if (__createReactContextZgo321__.length>0) {
+        __createReactContextZgo321__[__createReactContextZgo321__.length-1].off(this.onUpdate);
       }
     }
 
     getValue(): T {
-      if (__createReactContextZgo321__) {
-        return __createReactContextZgo321__.get();
+      if (__createReactContextZgo321__.length>0) {
+        return __createReactContextZgo321__[__createReactContextZgo321__.length-1].get();
       } else {
         return defaultValue;
       }
