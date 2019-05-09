@@ -102,7 +102,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            __createReactContextZgo321__[__createReactContextZgo321__-1].set(nextProps.value, changedBits);
+            __createReactContextZgo321__[__createReactContextZgo321__.length-2].set(nextProps.value, changedBits);
           }
         }
       }
