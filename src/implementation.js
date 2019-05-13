@@ -68,12 +68,12 @@ function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
-  let __createReactContextZgo321__ = [];
+  let __createReactContext321__ = [];
 
   class Provider extends Component<ProviderProps<T>> {
     constructor(props){
       super(props);
-      __createReactContextZgo321__[__createReactContextZgo321__.length] = createEventEmitter(this.props.value);
+      __createReactContext321__[__createReactContext321__.length] = createEventEmitter(this.props.value);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -101,7 +101,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            __createReactContextZgo321__[__createReactContextZgo321__.length].set(nextProps.value, changedBits);
+            __createReactContext321__[__createReactContext321__.length-1].set(nextProps.value, changedBits);
           }
         }
       }
@@ -128,8 +128,8 @@ function createReactContext<T>(
     }
 
     componentDidMount() {
-      if (__createReactContextZgo321__.length>0) {
-        __createReactContextZgo321__[__createReactContextZgo321__.length-1].on(this.onUpdate);
+      if (__createReactContext321__.length>0) {
+        __createReactContext321__[__createReactContext321__.length-1].on(this.onUpdate);
       }
       let { observedBits } = this.props;
       this.observedBits =
@@ -139,14 +139,14 @@ function createReactContext<T>(
     }
 
     componentWillUnmount() {
-      if (__createReactContextZgo321__.length>0) {
-        __createReactContextZgo321__[__createReactContextZgo321__.length-1].off(this.onUpdate);
+      if (__createReactContext321__.length>0) {
+        __createReactContext321__[__createReactContext321__.length-1].off(this.onUpdate);
       }
     }
 
     getValue(): T {
-      if (__createReactContextZgo321__.length>0) {
-        return __createReactContextZgo321__[__createReactContextZgo321__.length-1].get();
+      if (__createReactContext321__.length>0) {
+        return __createReactContext321__[__createReactContext321__.length-1].get();
       } else {
         return defaultValue;
       }
