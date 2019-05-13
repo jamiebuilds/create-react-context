@@ -55,7 +55,6 @@ function createEventEmitter(value) {
 
     set(newValue, changedBits) {
       value = newValue;
-      console.log(value);
       handlers.forEach(handler => handler(value, changedBits));
     }
   };
@@ -74,7 +73,7 @@ function createReactContext<T>(
   class Provider extends Component<ProviderProps<T>> {
     constructor(props){
       super(props);
-      __createReactContextZgo321__[__createReactContextZgo321__.length++] = createEventEmitter(this.props.value);
+      __createReactContextZgo321__[__createReactContextZgo321__.length] = createEventEmitter(this.props.value);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -102,7 +101,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            __createReactContextZgo321__[__createReactContextZgo321__.length-2].set(nextProps.value, changedBits);
+            __createReactContextZgo321__[__createReactContextZgo321__.length].set(nextProps.value, changedBits);
           }
         }
       }
