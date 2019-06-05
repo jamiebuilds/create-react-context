@@ -48,7 +48,7 @@ function createEventEmitter(value) {
     },
 
     off(handler) {
-      handlers = handlers.filter(h => h !== handler);
+       handlers = handlers.filter(h => h !== handler);
     },
 
     get() {
@@ -70,21 +70,23 @@ function createReactContext<T>(
   defaultValue: T,
   calculateChangedBits: ?(a: T, b: T) => number
 ): Context<T> {
+  let emitter; // Provider and Consumer share an internal inaccessible emitter
   const contextProp = '__create-react-context-' + gud() + '__';
 
   class Provider extends Component<ProviderProps<T>> {
-    emitter = createEventEmitter(this.props.value);
-
     static childContextTypes = {
-      [contextProp]: PropTypes.object.isRequired
+       [contextProp]: PropTypes.string.isRequired
     };
-
-    getChildContext() {
-      return {
-        [contextProp]: this.emitter
-      };
+    constructor(props, context){
+        super(props, context);
+        emitter = createEventEmitter(props.value);
     }
-
+    
+    getChildContext() {
+       return {
+          [contextProp]: contextProp
+       }
+    }
     componentWillReceiveProps(nextProps) {
       if (this.props.value !== nextProps.value) {
         let oldValue = this.props.value;
@@ -110,7 +112,7 @@ function createReactContext<T>(
           changedBits |= 0;
 
           if (changedBits !== 0) {
-            this.emitter.set(nextProps.value, changedBits);
+             emitter.set(nextProps.value, changedBits);//Notify all consumers to update
           }
         }
       }
@@ -123,15 +125,14 @@ function createReactContext<T>(
 
   class Consumer extends Component<ConsumerProps<T>, ConsumerState<T>> {
     static contextTypes = {
-      [contextProp]: PropTypes.object
+      [contextProp]: PropTypes.string
     };
 
     observedBits: number;
-
     state: ConsumerState<T> = {
       value: this.getValue()
     };
-
+   
     componentWillReceiveProps(nextProps) {
       let { observedBits } = nextProps;
       this.observedBits =
@@ -142,7 +143,7 @@ function createReactContext<T>(
 
     componentDidMount() {
       if (this.context[contextProp]) {
-        this.context[contextProp].on(this.onUpdate);
+         emitter.on(this.onUpdate);
       }
       let { observedBits } = this.props;
       this.observedBits =
@@ -152,17 +153,17 @@ function createReactContext<T>(
     }
 
     componentWillUnmount() {
-      if (this.context[contextProp]) {
-        this.context[contextProp].off(this.onUpdate);
-      }
+       if (this.context[contextProp]) {
+           emitter.off(this.onUpdate);
+       }
     }
 
     getValue(): T {
-      if (this.context[contextProp]) {
-        return this.context[contextProp].get();
-      } else {
-        return defaultValue;
-      }
+       if (this.context[contextProp]) {
+           return emitter.get();
+        } else {
+           return defaultValue;
+       }
     }
 
     onUpdate = (newValue, changedBits: number) => {
