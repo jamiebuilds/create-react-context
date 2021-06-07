@@ -3,7 +3,7 @@ import 'raf/polyfill';
 import createReactContext, { type Context } from '../implementation';
 import React, { type Node } from 'react';
 import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 Enzyme.configure({ adapter: new Adapter() });
 
